@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kru Pai Classroom • วิทยาศาสตร์เข้า ม.1 (30 ข้อ)</title>
+<style>
+  :root{
+    --bg:#f7f7fb; --card:#ffffff; --ink:#111827; --muted:#6b7280;
+    --primary:#dc2626; --primary2:#fca5a5;
+    --ring:#dc2626; --ring2:#fee2e2;
+    --good:#16a34a; --bad:#ef4444;
+    --yellow:#fecaca; --blue:#f87171;
+    --shadow:0 14px 40px rgba(2,6,23,.08); --r:18px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:ui-rounded,Inter,"Noto Sans Thai",system-ui,sans-serif;color:var(--ink);
+       background:linear-gradient(180deg,#fafafc,var(--bg));background-attachment:fixed;
+       padding:clamp(12px,3vw,28px);}
+  .app{width:min(1080px,100%);margin:0 auto}
+  .card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);
+        padding:clamp(18px,3.6vw,32px);border:1px solid #eef2ff}
+  .brand{display:flex;gap:10px;align-items:center;margin-bottom:.25rem}
+  .logo{display:inline-flex;align-items:center;gap:8px;padding:.35rem .8rem;border-radius:14px;
+        font-weight:1000;background:linear-gradient(90deg,#6366f1,#a78bfa);color:#fff;
+        box-shadow: inset 0 -3px 0 var(--yellow);}
+  .tag{display:inline-flex;align-items:center;padding:.3rem .6rem;border-radius:999px;background:#fff4c2;color:#111;font-weight:800;font-size:.92em}
+  h1.title{margin:.1rem 0 .75rem;font-size:clamp(26px,5.6vw,44px);line-height:1.1}
+  p.lead{margin:.3rem 0 1.1rem;color:var(--muted);font-weight:600;font-size:clamp(15px,2.9vw,18px)}
+  .row{display:flex;flex-wrap:wrap;gap:10px}
+  .btn{appearance:none;border:1px solid #e5e7eb;cursor:pointer;width:100%;display:inline-flex;align-items:center;justify-content:center;gap:10px;
+       border-radius:14px;padding:clamp(12px,3vw,16px) clamp(14px,3.2vw,18px);font-weight:900;letter-spacing:.2px;font-size:clamp(16px,4.2vw,18px);
+       color:#111;background:#fffdf2;transition:transform .04s,background .15s}
+  .btn:hover{transform:translateY(-1px);background:#fff6d6}
+  .btn:active{transform:translateY(0) scale(.99)}
+  .btn.primary{color:#fff;background:linear-gradient(180deg,#6b7280,#94a3b8);border-color:transparent}
+  .btn.secondary{background:#fffdf2}
+  .btn.ghost{background:#fff}
+  input[type="text"]{width:100%;padding:12px 14px;border-radius:12px;border:2px solid #e5e7eb;font-weight:800;font-size:16px;background:#fff}
+  .hud{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:.2rem 0 1rem}
+  .pill{display:inline-flex;align-items:center;gap:8px;padding:.5rem .8rem;border-radius:12px;font-weight:900;background:#fff9db;color:#111}
+  .timer{height:12px;border-radius:999px;overflow:hidden;background:#eef2f7;margin:.4rem 0 1.1rem}
+  .timer .bar{height:100%;width:100%;background:linear-gradient(90deg,var(--yellow),var(--blue));transform-origin:left center;transition:width .2s linear}
+  .question-wrap{display:flex;gap:12px;align-items:stretch;border-radius:16px;padding:clamp(14px,3.6vw,18px);background:#fff;border:1px solid #eef2ff;box-shadow:var(--shadow);margin-bottom:10px}
+  .q-icon{width:60px;min-width:60px;display:grid;place-items:center;border-radius:12px;background:#f3f4f6}
+  .question{flex:1;font-size:clamp(18px,4.8vw,26px);font-weight:1000;line-height:1.35;color:#111827}
+  .choices .btn{font-size:clamp(16px,4.6vw,20px);border-radius:14px;padding-block:clamp(10px,3.4vw,14px)}
+  .final{text-align:center}
+  .score-ring{width:170px;height:170px;margin:8px auto 10px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--ring) var(--deg),var(--ring2) 0)}
+  .score-ring::before{content:"";width:120px;height:120px;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 8px #eef2ff}
+  .score-num{position:relative;margin-top:-120px;font-size:36px;font-weight:1000;color:#111827}
+  .meta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:8px 0 12px}
+  .pill2{padding:8px 12px;border-radius:999px;background:#eef2ff;color:#1f2937;font-weight:900;border:1px solid #e5e7eb}
+  .review{margin-top:14px;background:#fff;border:1px solid #eef2ff;border-radius:14px;overflow:hidden;max-height:min(60vh,520px);overflow-y:auto}
+  .rev-row{display:grid;grid-template-columns:36px 1fr 1fr 1fr;gap:8px;padding:10px 12px;align-items:center;border-bottom:1px solid #f1f1f5}
+  .rev-row.head{position:sticky;top:0;background:#f8fafc;font-weight:900}
+  .ok{color:var(--good);font-weight:900}.no{color:var(--bad);font-weight:900}
+
+  /* ✓ ✗ bounce icons */
+  .result-icon{position:absolute;left:-36px;top:50%;transform:translateY(-50%) scale(.5);font-size:32px;opacity:0;transition:transform .22s ease, opacity .22s ease}
+  .show-correct .result-icon.correct{color:var(--good);opacity:1;transform:translateY(-50%) scale(1.2)}
+  .show-wrong .result-icon.wrong{color:var(--bad);opacity:1;transform:translateY(-50%) scale(1.2)}
+</style>
+</head>
+<body>
+<div class="app">
+
+<section id="home" class="card">
+  <div class="brand"><span class="logo">Kru Pai Classroom</span><span class="tag">เข้า ม.1 • วิทยาศาสตร์</span></div>
+  <h1 class="title">แบบทดสอบ 30 ข้อ • ยากนิดนึง</h1>
+  <p class="lead">เลือกโหมดแล้วเริ่มได้เลย — โทนสีอ่อนสบายตา 🌤️</p>
+  <div class="row" style="margin:.5rem 0 1rem"><input id="nickname" type="text" placeholder="พิมพ์ชื่อเล่นของคุณ (เช่น Mint, Boss, Beam)"></div>
+  <div class="row" style="margin-bottom:.5rem;">
+    
+  </div>
+  <div class="row"><button class="btn primary" onclick="startGame()">เริ่มทำแบบทดสอบ — 30 ข้อ</button></div>
+  <div class="row" style="margin-top:12px;">
+    <span class="pill">ชื่อ: <b id="home-name">—</b></span>
+    <span class="pill">โหมด: <b id="home-mode">จับเวลา</b></span>
+    <span class="pill">สถิติสูงสุด (โหมดนี้): <b id="best">—</b></span>
+  </div>
+</section>
+
+<section id="game" class="card" style="display:none">
+  <div class="brand"><span class="logo">Kru Pai Classroom</span><span class="tag">ข้อสอบ 30 ข้อ</span></div>
+  <div class="hud">
+    <span class="pill">ชื่อ: <b id="hud-name">—</b></span>
+    <span class="pill">โหมด: <b id="hud-mode">—</b></span>
+    <span class="pill">ข้อ: <b id="hud-idx">1</b>/<b id="hud-total">—</b></span>
+    <span class="pill">คะแนน: <b id="hud-score">0</b></span>
+    <span class="pill" id="time-pill">เวลารวม: <b id="hud-time">1800</b>s</span>
+  </div>
+  <div class="timer" id="timerBox"><div id="timebar" class="bar"></div></div>
+  <div class="question-wrap">
+    <div class="q-icon"><svg width="38" height="38" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#94a3b8" stroke-width="2"/><path d="M8 12h8M12 8v8" stroke="#6366f1" stroke-width="2" stroke-linecap="round"/></svg></div>
+    <div style="position:relative;flex:1;">
+      <span class="result-icon correct">✓</span>
+      <span class="result-icon wrong">✗</span>
+      <div class="question" id="qtext">—</div>
+    </div>
+  </div>
+  <div class="choices row" id="choices"></div>
+  <div class="row" style="margin-top:10px;"><button class="btn ghost" onclick="quitToHome()">กลับหน้าแรก</button></div>
+</section>
+
+<section id="result" class="card" style="display:none">
+  <div class="brand"><span class="logo">Kru Pai Classroom</span><span class="tag">สรุปคะแนน</span></div>
+  <div class="final">
+    <div id="ring" class="score-ring" style="--deg:0deg;"></div>
+    <div id="scoreNum" class="score-num">0/30</div>
+    <div class="meta">
+      <div class="pill2" id="percentPill">0%</div>
+      <div class="pill2" id="modePill">Mode: —</div>
+      <div class="pill2" id="timePill">Time: <span id="timeSpent">0:00</span></div>
+    </div>
+    <div class="row" style="justify-content:center;gap:10px;margin-top:8px;">
+      <button class="btn primary" onclick="restart()">เล่นใหม่</button>
+      <button class="btn secondary" onclick="goHome()">กลับหน้าแรก</button>
+    </div>
+  </div>
+  <div class="review" id="reviewBox" style="margin-top:12px;">
+    <div class="rev-row head"><div>#</div><div>โจทย์</div><div>คำตอบของฉัน</div><div>เฉลย</div></div>
+    <div id="reviewRows"></div>
+  </div>
+  <canvas id="confetti" style="position:fixed;inset:0;pointer-events:none;"></canvas>
+</section>
+
+</div>
+
+<script>
+// --------- ข้อมูลข้อสอบ (30 ข้อ) ----------
+const DATA=[
+  {q:"ส่วนใดของเซลล์ทำหน้าที่ควบคุมการทำงานทั้งหมดของเซลล์",opts:["นิวเคลียส","ไซโทพลาสซึม","ไรโบโซม","ผนังเซลล์"],ans:0},
+  {q:"อวัยวะใดดูดซึมน้ำและเกลือแร่กลับเข้าสู่ร่างกายส่วนใหญ่",opts:["ลำไส้ใหญ่","ลำไส้เล็ก","กระเพาะอาหาร","ตับอ่อน"],ans:0},
+  {q:"เอนไซม์อะไมเลสในน้ำลายย่อยอาหารชนิดใดได้ดีที่สุด",opts:["แป้ง","โปรตีน","ไขมัน","วิตามิน"],ans:0},
+  {q:"เลือดจากหัวใจห้องล่างขวาถูกสูบไปยังที่ใด",opts:["ปอดผ่านหลอดเลือดแดงปอด","ร่างกายผ่านเอออร์ตา","ตับผ่านหลอดเลือดตับ","สมองผ่านคาโรติด"],ans:0},
+  {q:"ข้อใดถูกต้องเกี่ยวกับหลอดเลือดแดงเทียบกับหลอดเลือดดำ",opts:["ผนังหนาและแรงดันสูงกว่า","มีลิ้นมากกว่า","พาเลือดเข้าสู่หัวใจเท่านั้น","มีผนังบางกว่า"],ans:0},
+  {q:"สารละลายกรดมีค่า pH ประมาณเท่าใด",opts:["น้อยกว่า 7","เท่ากับ 7","มากกว่า 7","มากกว่า 14"],ans:0},
+  {q:"วิธีใดเหมาะที่สุดในการแยกเกลือออกจากน้ำทะเลเพื่อให้ได้ ‘เกลือ’",opts:["การระเหยตกผลึก","การกลั่น","การกรองกระดาษ","โครมาโทกราฟี"],ans:0},
+  {q:"ข้อใดเป็นคอลลอยด์",opts:["น้ำนม","น้ำเกลือ","น้ำเชื่อม","น้ำบริสุทธิ์"],ans:0},
+  {q:"เงาเกิดขึ้นเพราะแสงมีสมบัติใดเด่นที่สุด",opts:["เดินทางเป็นเส้นตรง","สะท้อนกลับหมด","หักเหไม่ได้","ดูดซับทั้งหมด"],ans:0},
+  {q:"เลนส์นูนใช้แก้ปัญหาสายตาใด",opts:["สายตายาว","สายตาสั้น","ตาบอดสี","เอียงภาพ"],ans:0},
+  {q:"รุ้งกินน้ำเกิดจากปรากฏการณ์ใดเป็นหลัก",opts:["การหักเหและกระจายแสงในหยดน้ำ","การสะท้อนเท่านั้น","การเลี้ยวเบนเท่านั้น","การดูดซับแสง"],ans:0},
+  {q:"เสียงเดินทางได้เร็วที่สุดในตัวกลางใด",opts:["ของแข็ง","ของเหลว","อากาศ","สูญญากาศ"],ans:0},
+  {q:"วิธีลดแรงเสียดทานที่ดีที่สุดในตัวเลือกต่อไปนี้",opts:["ใช้น้ำมันหล่อลื่น","เพิ่มน้ำหนักกด","ทำผิวขรุขระ","เพิ่มพื้นที่สัมผัส"],ans:0},
+  {q:"จุดเดือดของน้ำบนยอดเขาจะเป็นอย่างไรเมื่อเทียบกับระดับน้ำทะเล",opts:["ต่ำลง","เท่ากัน","สูงขึ้น","ไม่แน่นอน"],ans:0},
+  {q:"สัตว์มีกระดูกสันหลังแบ่งเป็นกี่กลุ่มใหญ่ตามการจัดหมวดหมู่พื้นฐาน",opts:["5 กลุ่ม","3 กลุ่ม","4 กลุ่ม","6 กลุ่ม"],ans:0},
+  {q:"พืชข้อใดสืบพันธุ์ด้วยสปอร์",opts:["เฟิร์น","มะม่วง","หญ้า","สน"],ans:0},
+  {q:"ส่วนใดของดอกจะพัฒนาเป็น ‘ผล’ หลังผสมเกสร",opts:["รังไข่","ก้านชูเกสรตัวผู้","กลีบดอก","กลีบเลี้ยง"],ans:0},
+  {q:"การสังเคราะห์ด้วยแสงเกิดในโครงสร้างใดของพืช",opts:["คลอโรพลาสต์","ไมโตคอนเดรีย","ไรโบโซม","แวคิวโอล"],ans:0},
+  {q:"การถ่ายเทความร้อนแบบพา (convection) เกิดเด่นในตัวกลางใด",opts:["ของเหลวและแก๊ส","ของแข็ง","สูญญากาศ","ของแข็งและของเหลวเท่านั้น"],ans:0},
+  {q:"ในวัฏจักรน้ำ การเปลี่ยนไอน้ำเป็นหยดน้ำเรียกว่าอะไร",opts:["การควบแน่น","การระเหย","การหลอมเหลว","การระเหิด"],ans:0},
+  {q:"ขณะหายใจเข้า กล้ามเนื้อกะบังลมทำงานอย่างไร",opts:["หดตัวลงทำให้ปอดขยาย","คลายตัวทำให้ปอดแฟบ","ไม่เปลี่ยนแปลง","หดตัวทำให้ปอดแฟบ"],ans:0},
+  {q:"ข้อใดจัดเป็นการเปลี่ยนแปลงแบบสมบูรณ์ของแมลง (complete metamorphosis)",opts:["ไข่-ตัวหนอน-ดักแด้-ตัวเต็มวัย","ไข่-ตัวอ่อน-ตัวเต็มวัย","ตัวอ่อน-ดักแด้-ตัวเต็มวัย","ไข่-ตัวหนอน-ตัวเต็มวัย"],ans:0},
+  {q:"พลังงานศักย์โน้มถ่วงของวัตถุขึ้นกับปัจจัยใด ‘ไม่’ เกี่ยวข้อง",opts:["สีของวัตถุ","มวลวัตถุ","ความสูงจากพื้นอ้างอิง","ค่าความเร่งโน้มถ่วง"],ans:0},
+  {q:"ข้อใดเป็นวัสดุที่ถูกดูดติดกับแม่เหล็กได้ดี",opts:["เหล็ก","อะลูมิเนียม","ทองแดง","ไม้"],ans:0},
+  {q:"วงจรไฟฟ้าแบบขนานมีลักษณะเด่นข้อใด",opts:["หลอดหนึ่งขาด อีกหลอดยังติดได้","กระแสเท่ากันทุกกิ่งเสมอ","แรงดันรวมเท่ากับผลรวมแรงดันกิ่ง","แรงดันข้ามกิ่งต่างกัน"],ans:0},
+  {q:"สาเหตุของโรคไข้หวัดโดยทั่วไปเกิดจาก",opts:["ไวรัส","แบคทีเรีย","เชื้อรา","โพรทิสต์"],ans:0},
+  {q:"ทดสอบแป้งด้วยไอโอดีนจะเปลี่ยนเป็นสีใด",opts:["น้ำเงิน-ดำ","แดงอิฐ","เขียวมรกต","เหลืองอำพัน"],ans:0},
+  {q:"ดินชนิดใดเหมาะกับการเพาะปลูกมากที่สุด",opts:["ดินร่วน","ดินทราย","ดินเหนียวล้วน","ดินพรุเป็นกรดจัด"],ans:0},
+  {q:"ปัจจัยใดจำเป็นต่อการเผาไหม้ให้เกิดต่อเนื่อง ‘ครบ’ มากที่สุด",opts:["เชื้อเพลิง+ออกซิเจน+ความร้อน","เพียงเชื้อเพลิง","เพียงออกซิเจน","เพียงความร้อน"],ans:0},
+  {q:"การเกิด ‘กลางวัน–กลางคืน’ ของโลกมีสาเหตุมาจาก",opts:["การหมุนรอบตัวเองของโลก","การโคจรรอบดวงอาทิตย์","แกนโลกเอียง 23.5°","ดวงจันทร์บังแสงอาทิตย์"],ans:0}
+];
+
+// --------- ตัวแปรเกม ----------
+let mode='timed', totalTime=1800,nickname='Player',order=[],idx=0,score=0,tLeft=25,timer=null,locked=false,current=null,answers=[],startTime=Date.now();
+
+const home=document.getElementById('home'),game=document.getElementById('game'),result=document.getElementById('result');
+const nicknameInput=document.getElementById('nickname'),homeName=document.getElementById('home-name'),homeMode=document.getElementById('home-mode'),bestEl=document.getElementById('best');
+const hudName=document.getElementById('hud-name'),hudMode=document.getElementById('hud-mode'),hudIdx=document.getElementById('hud-idx'),hudTotal=document.getElementById('hud-total'),hudScore=document.getElementById('hud-score'),hudTime=document.getElementById('hud-time'),timebar=document.getElementById('timebar');
+const qtext=document.getElementById('qtext'),choices=document.getElementById('choices');
+const scoreNum=document.getElementById('scoreNum'),percentPill=document.getElementById('percentPill'),modePill=document.getElementById('modePill'),timeSpent=document.getElementById('timeSpent'),ring=document.getElementById('ring'),reviewRows=document.getElementById('reviewRows');
+
+const KEY="m1_sci_best";
+function readBest(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return{}}}
+function writeBest(x){localStorage.setItem(KEY,JSON.stringify(x))}
+function getBest(name,md){const db=readBest();return db[name]?.[md]??null}
+function setBest(name,md,val){const db=readBest();if(!db[name])db[name]={};if(db[name][md]==null||val>db[name][md])db[name][md]=val;writeBest(db)}
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function renderHome(){const n=(nicknameInput.value||'').trim()||'Player';homeName.textContent=n;homeMode.textContent=mode==='timed'?'จับเวลา':'ฝึก';bestEl.textContent=getBest(n,mode)??'—'}
+function setMode(m){mode=m;renderHome()}
+
+function startGame(){
+  nickname=(nicknameInput.value||'').trim()||'Player';
+  hudName.textContent=nickname;
+  hudMode.textContent=mode==='timed'?'จับเวลา':'ฝึก';
+  document.getElementById('time-pill').style.display=mode==='timed'?'inline-flex':'none';
+  document.getElementById('timerBox').style.display=mode==='timed'?'block':'none';
+  order=shuffle(Array.from(DATA.keys()));
+  idx=0; score=0; hudScore.textContent=score; answers=[]; startTime=Date.now(); locked=false;
+  document.getElementById('hud-total').textContent=DATA.length;
+  home.style.display='none'; game.style.display='block'; result.style.display='none';
+  nextQ();
+}
+
+function nextQ(){
+  stopTimer(); locked=false;
+  if(idx>=order.length){return finish()}
+  const base=DATA[order[idx]];
+  const item=JSON.parse(JSON.stringify(base));
+  const opts=item.opts.map((t,i)=>({t,i}));
+  shuffle(opts);
+  item.ans=opts.findIndex(o=>o.i===item.ans);
+  item.opts=opts.map(o=>o.t);
+  current=item;
+  qtext.textContent=item.q;
+  choices.innerHTML='';
+  item.opts.forEach((t,i)=>{
+    const b=document.createElement('button');
+    b.className='btn secondary';
+    b.textContent=t;
+    b.onclick=()=>choose(i);
+    choices.appendChild(b);
+  });
+  document.getElementById('hud-idx').textContent=idx+1;
+  if(mode==='timed'){
+    if(idx===0){ tLeft=totalTime; }
+    hudTime.textContent=tLeft; timebar.style.width=Math.max(0,(tLeft/totalTime)*100)+'%';
+    timer=setInterval(()=>{
+      tLeft-=1; hudTime.textContent=tLeft; timebar.style.width=Math.max(0,(tLeft/totalTime)*100)+'%';
+      if(tLeft<=0){ stopTimer(); finish(); }
+    },1000);
+  }
+}
+
+function stopTimer(){ if(timer){ clearInterval(timer); timer=null; } }
+function rec(item,c){ answers.push({q:item.q,opts:item.opts.slice(),correctIndex:item.ans,chosenIndex:c}) }
+
+function choose(i){
+  if(locked) return; locked=true;
+  const wrap=document.querySelector('.question-wrap');
+  wrap.classList.remove('show-correct','show-wrong');
+  const ok=(i===current.ans);
+  rec(current,i);
+  if(ok){ score+=1; hudScore.textContent=score; wrap.classList.add('show-correct'); }
+  else{ wrap.classList.add('show-wrong'); }
+  stopTimer();
+  idx+=1;
+  setTimeout(()=>{
+    wrap.classList.remove('show-correct','show-wrong');
+    locked=false;
+    nextQ();
+  }, 520);
+}
+
+function finish(){
+  game.style.display='none'; result.style.display='block';
+  scoreNum.textContent=`${score}/${DATA.length}`;
+  const pct=Math.round((score/DATA.length)*100);
+  percentPill.textContent=pct+'%';
+  modePill.textContent='Mode: '+(mode==='timed'?'Timed':'Practice');
+  const secs=Math.max(1,Math.round((Date.now()-startTime)/1000));
+  timeSpent.textContent=Math.floor(secs/60)+':'+String(secs%60).padStart(2,'0');
+  ring.style.setProperty('--deg',(pct*3.6)+'deg');
+  setBest(nickname,mode,score);
+  reviewRows.innerHTML='';
+  answers.forEach((a,i)=>{
+    const row=document.createElement('div'); row.className='rev-row';
+    const mine=a.chosenIndex>=0?a.opts[a.chosenIndex]:'— (หมดเวลา)';
+    const ok=a.chosenIndex===a.correctIndex;
+    row.innerHTML=`<div>${i+1}</div><div>${a.q}</div><div class="${ok?'ok':'no'}">${mine}</div><div>${a.opts[a.correctIndex]}</div>`;
+    reviewRows.appendChild(row);
+  });
+  confetti();
+}
+
+function restart(){ startGame(); }
+function quitToHome(){ stopTimer(); game.style.display='none'; home.style.display='block'; renderHome(); }
+function goHome(){ result.style.display='none'; home.style.display='block'; renderHome(); }
+
+// คอนเฟ็ตตี้น่ารัก
+function confetti(){
+  const canvas=document.getElementById('confetti'); const ctx=canvas.getContext('2d');
+  const resize=()=>{canvas.width=innerWidth;canvas.height=innerHeight}; resize(); addEventListener('resize',resize);
+  let parts=Array.from({length:120},()=>spawn());
+  function spawn(){return {x:Math.random()*canvas.width,y:-20-Math.random()*200,vy:2+Math.random()*2,vx:-1+Math.random()*2,s:3+Math.random()*6,c:`hsl(${260+Math.random()*60},70%,70%)`,r:Math.random()*Math.PI}}
+  ;(function frame(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.r+=0.08;ctx.fillStyle=p.c;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s);ctx.restore();if(p.y>canvas.height+20)Object.assign(p,spawn())});
+    requestAnimationFrame(frame);
+  })();
+}
+
+nicknameInput.addEventListener('input',renderHome); renderHome();
+</script>
+</body>
+</html>
